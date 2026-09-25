@@ -56,6 +56,34 @@ public class JdbcMemberRepository implements MemberRepository {
     }
 
     @Override
+    public Member findByUsername(String username) {
+
+        String findQuery = "SELECT id, username, tel, address, email FROM tb_member WHERE username = ?";
+
+        try (Connection connection = ConnectionUtil.getConnection()) {
+
+            PreparedStatement pS = connection.prepareStatement(findQuery);
+
+            pS.setString(1, username);
+
+            ResultSet rs = pS.executeQuery();
+
+            if (rs.next()) {
+                int memberId = rs.getInt("id");
+                String usernameMember = rs.getString("username");
+                String tel = rs.getString("tel");
+                String address = rs.getString("address");
+                String email = rs.getString("email");
+                return new Member(memberId, username, tel, address, email);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    @Override
     public void update(Member member) {
         String updateQuery = "UPDATE tb_member SET username = ?, tel = ?, address = ?, email = ? WHERE id = ?";
         try (Connection connection = ConnectionUtil.getConnection();
@@ -112,7 +140,7 @@ public class JdbcMemberRepository implements MemberRepository {
 
     @Override
     public int count() {
-        String countQuery = "SELECT count(*) as count FROM member";
+        String countQuery = "SELECT COUNT(*) AS count FROM member";
 
         try (Connection connection = ConnectionUtil.getConnection();
              Statement pS = connection.createStatement()) {

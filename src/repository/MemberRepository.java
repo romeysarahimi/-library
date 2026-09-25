@@ -16,4 +16,6 @@ public interface MemberRepository {
     void delete(Member member);
 
     int count();
+
+    Member findByUsername(String username);
 }
