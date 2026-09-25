@@ -15,11 +15,10 @@ public class JdbcBookRepository implements BookRepository {
     @Override
     public void save(Book book) {
 
-        String addQuery = "INSERT INTO tb_book (title , author, available) VALUES (?, ?, ?)";
+        String addQuery = "INSERT INTO book (title , author, available) VALUES (?, ?, ?)";
 
-        try (Connection connection = ConnectionUtil.getConnection()) {
-
-            PreparedStatement pS = connection.prepareStatement(addQuery);
+        try (Connection connection = ConnectionUtil.getConnection();
+             PreparedStatement pS = connection.prepareStatement(addQuery)) {
 
             pS.setString(1, book.getTitle());
             pS.setString(2, book.getAuthor());
@@ -36,11 +35,10 @@ public class JdbcBookRepository implements BookRepository {
     @Override
     public Book findByTitle(String title) {
 
-        String updateQuery = "SELECT id, title, author, available FROM tb_book WHERE title = ?";
+        String updateQuery = "SELECT id, title, author, available FROM book WHERE title = ?";
 
-        try (Connection connection = ConnectionUtil.getConnection()) {
-
-            PreparedStatement pS = connection.prepareStatement(updateQuery);
+        try (Connection connection = ConnectionUtil.getConnection();
+             PreparedStatement pS = connection.prepareStatement(updateQuery)) {
 
             pS.setString(1, title);
 
@@ -61,13 +59,12 @@ public class JdbcBookRepository implements BookRepository {
         return null;
     }
 
-    public Book findById (int id){
+    public Book findById(int id) {
 
         String findQuery = "SELECT id, title, author, available FROM book WHERE id = ?";
 
-        try (Connection connection = ConnectionUtil.getConnection()) {
-
-            PreparedStatement pS = connection.prepareStatement(findQuery);
+        try (Connection connection = ConnectionUtil.getConnection();
+             PreparedStatement pS = connection.prepareStatement(findQuery)) {
 
             pS.setInt(1, id);
 
@@ -91,10 +88,10 @@ public class JdbcBookRepository implements BookRepository {
     @Override
     public void update(Book book) {
 
-        String updateQuery = "UPDATE tb_book SET  title = ?, author = ?, available = ? WHERE id = ?";
+        String updateQuery = "UPDATE book SET  title = ?, author = ?, available = ? WHERE id = ?";
 
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(updateQuery);
+        try (Connection connection = ConnectionUtil.getConnection();
+             PreparedStatement ps = connection.prepareStatement(updateQuery)) {
 
             ps.setString(1, book.getTitle());
             ps.setString(2, book.getAuthor());
@@ -113,10 +110,10 @@ public class JdbcBookRepository implements BookRepository {
 
         List<Book> books = new ArrayList<>();
 
-        String findAllBooks = "SELECT * FROM tb_book";
+        String findAllBooks = "SELECT * FROM book";
 
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(findAllBooks);
+        try (Connection connection = ConnectionUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement(findAllBooks)) {
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -143,8 +140,8 @@ public class JdbcBookRepository implements BookRepository {
 
         String deleteQuery = "Delete FROM book WHERE id = ?";
 
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement((deleteQuery));
+        try (Connection connection = ConnectionUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement((deleteQuery))) {
 
             statement.setInt(1, book.getId());
             statement.executeUpdate();
@@ -159,8 +156,8 @@ public class JdbcBookRepository implements BookRepository {
 
         String deleteQuery = "Delete from book where id = ?";
 
-        try (Connection connection = ConnectionUtil.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement((deleteQuery));
+        try (Connection connection = ConnectionUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement((deleteQuery))) {
 
             statement.setInt(1, id);
             statement.executeUpdate();

@@ -1,73 +1,73 @@
 package service;
 
+import dto.BookCreateRequest;
+import dto.BookUpdateRequest;
 import entity.Book;
 import repository.BookRepository;
+import util.Validator;
 
 import java.util.List;
 
 public class BookService {
 
-    //    TODO: implement this class
-    private BookRepository bookRepository;
+    private static final String TITLE_REQUIRED_MESSAGE = "Title cannot be empty";
+    private static final String BOOK_NOT_FOUND_MESSAGE = "Book not found";
+    private static final String BOOK_ALREADY_EXISTS_MESSAGE = "Book with this title already exists";
+
+    private final BookRepository bookRepository;
 
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
-
     }
 
-    public void addBook(int id, String author, String title, boolean available) throws IllegalAccessException {
-        if (title == null) {
-            throw new IllegalAccessException("title can not empty");
+    public void addBook(BookCreateRequest request) {
+        Validator.notNull(request.title(), TITLE_REQUIRED_MESSAGE);
 
-        }
-        Book book = bookRepository.findByTitle(title);
-        if (book != null) {
-            throw new IllegalAccessException("available book");
+        Book existingBook = bookRepository.findByTitle(request.title());
+        Validator.isNull(existingBook, BOOK_ALREADY_EXISTS_MESSAGE);
 
-        }
-        Book newbook = new Book();
-        newbook.setId(id);
-        newbook.setAuthor(author);
-        newbook.setTitle(title);
-        newbook.setAvailable(available);
+        Book newBook = new Book();
+        newBook.setAuthor(request.author());
+        newBook.setTitle(request.title());
+        newBook.setAvailable(request.available());
 
-        bookRepository.save(newbook);
-
+        bookRepository.save(newBook);
     }
 
-    public void updateBook(int id, String author, String title, boolean available) throws IllegalAccessException {
-        Book book = bookRepository.findByTitle(title);
-        if (book == null) {
-            throw new IllegalAccessException("Book not found");
-        }
-        if (title == null) {
-            throw new IllegalAccessException("title can not empty");
-        }
-        book.setAuthor(author);
-        book.setTitle(title);
-        book.setAvailable(available);
+    public void updateBook(BookUpdateRequest request) {
+        Validator.notNull(request.title(), TITLE_REQUIRED_MESSAGE);
+
+        Book book = findBookByTitleOrThrow(request.title());
+
+        book.setAuthor(request.author());
+        book.setTitle(request.title());
+        book.setAvailable(request.available());
+
         bookRepository.update(book);
     }
 
-    public void deleteBook(int id) throws IllegalAccessException {
-        Book book = bookRepository.findById(id);
-        if (book == null) {
-            throw new IllegalAccessException("Book not found");
-        }
-        bookRepository.deleteById(id);
+    public void deleteBook(int id) {
+        Book book = findBookByIdOrThrow(id);
+        bookRepository.deleteById(book.getId());
     }
 
-    public Book findById(int id)throws  IllegalAccessException{
-        Book book=bookRepository.findById(id);
-        if(book==null){
-            throw new IllegalAccessException("Book not found");
-        }
-        return book;
+    public Book findById(int id) {
+        return findBookByIdOrThrow(id);
     }
-    public List<Book> findAll(){
+
+    public List<Book> findAll() {
         return bookRepository.findAll();
     }
-    public void delete(Book book){
-        bookRepository.delete(book);
+
+    private Book findBookByIdOrThrow(int id) {
+        Book book = bookRepository.findById(id);
+        Validator.notNull(book, BOOK_NOT_FOUND_MESSAGE);
+        return book;
+    }
+
+    private Book findBookByTitleOrThrow(String title) {
+        Book book = bookRepository.findByTitle(title);
+        Validator.notNull(book, BOOK_NOT_FOUND_MESSAGE);
+        return book;
     }
 }
