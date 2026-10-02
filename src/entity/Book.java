@@ -1,19 +1,20 @@
 package entity;
 
-public class Book {
-    private int id;
+public class Book extends BaseEntity <Integer>{
     private String title;
     private String author;
     private boolean available;
 
     public Book(int id, String title, String author, boolean available) {
-        this.id = id;
+        super(id);
+
         this.title = title;
         this.author = author;
         this.available = available;
     }
 
     public Book() {
+        super();
 
     }
 
@@ -27,14 +28,6 @@ public class Book {
 
     public boolean isAvailable() {
         return available;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setTitle(String title) {
@@ -52,7 +45,7 @@ public class Book {
     @Override
     public String toString() {
         return "Book{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", available=" + available +

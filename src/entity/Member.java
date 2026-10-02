@@ -1,8 +1,7 @@
 package entity;
 
-public class Member {
+public class Member extends BaseEntity <Integer> {
 
-    private int id;
     private String username;
     private String tel;
     private String address;
@@ -13,20 +12,14 @@ public class Member {
     }
 
     public Member(int id, String username, String tel, String address, String email) {
-        this.id = id;
+        super(id);
         this.username = username;
         this.tel = tel;
         this.address = address;
         this.email = email;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
@@ -63,7 +56,7 @@ public class Member {
     @Override
     public String toString() {
         return "Member{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", username='" + username + '\'' +
                 ", tel='" + tel + '\'' +
                 ", address='" + address + '\'' +
