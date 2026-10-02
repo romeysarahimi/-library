@@ -29,7 +29,7 @@ public class JdbcMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Member findById(int id) {
+    public Member findById(Integer id) {
         String findQuery = "SELECT id, username, tel, address, email FROM tb_member WHERE id = ?";
 
         try (Connection connection = ConnectionUtil.getConnection()) {
@@ -136,6 +136,11 @@ public class JdbcMemberRepository implements MemberRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+
     }
 
     @Override

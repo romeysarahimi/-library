@@ -37,7 +37,7 @@ public class JdbcLoanRepository implements LoanRepository {
     }
 
     @Override
-    public Loan findById(int id) {
+    public Loan findById(Integer id) {
 
         String findQuery = "SELECT id, book_id, member_id, loan_date, return_date FROM loan WHERE id = ?";
 
@@ -71,6 +71,21 @@ public class JdbcLoanRepository implements LoanRepository {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    @Override
+    public List<Loan> findAll() {
+        return List.of();
+    }
+
+    @Override
+    public void delete(Loan entity) {
+
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+
     }
 
     @Override

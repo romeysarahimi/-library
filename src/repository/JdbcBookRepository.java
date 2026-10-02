@@ -59,7 +59,8 @@ public class JdbcBookRepository implements BookRepository {
         return null;
     }
 
-    public Book findById(int id) {
+    @Override
+    public Book findById(Integer id) {
 
         String findQuery = "SELECT id, title, author, available FROM book WHERE id = ?";
 
@@ -152,7 +153,7 @@ public class JdbcBookRepository implements BookRepository {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
 
         String deleteQuery = "Delete from book where id = ?";
 
