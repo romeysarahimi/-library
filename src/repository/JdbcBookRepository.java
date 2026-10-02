@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcBookRepository implements BookRepository {
+public class JdbcBookRepository extends AbstractBaseRepository<Book,Integer> implements BookRepository {
 
     @Override
     public void save(Book book) {
